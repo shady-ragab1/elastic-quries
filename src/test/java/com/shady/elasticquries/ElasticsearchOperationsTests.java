@@ -8,9 +8,12 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.IndexQuery;
-import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.Query;
-import org.springframework.data.elasticsearch.core.query.StringQuery;
+import org.springframework.data.elasticsearch.core.query.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -102,6 +102,19 @@ class ElasticsearchOperationsTests {
 
 
 
+
+	}
+
+	@Test
+	public void test_elasticsearchOperations_queries(){
+		Query query =new NativeSearchQueryBuilder()
+				.withSort(SortBuilders.fieldSort("id")
+						.order(SortOrder.DESC))
+				.withQuery(QueryBuilders.matchAllQuery()).build();
+
+		SearchHits<Memo> searchHits = elasticsearchOperations.search(query,Memo.class,IndexCoordinates.of("memo"));
+
+		assertEquals("3",searchHits.getSearchHits().get(0).getContent().getId());
 
 	}
 
