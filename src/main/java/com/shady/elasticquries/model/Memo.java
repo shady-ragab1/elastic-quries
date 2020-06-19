@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Document(indexName = "memo",shards = 1, replicas = 1,versionType = VersionType.INTERNAL)
 //@TypeAlias("memo-alias")
@@ -17,10 +18,11 @@ import org.springframework.data.elasticsearch.annotations.Field;
 public class Memo {
 
     @Id
+    @Field(type = FieldType.Keyword)
     private String id;
 
-    @Field(store = true)
+    @Field(type = FieldType.Text)
     private String desc;
-    @Field(store = false)
+    @Field(type = FieldType.Text)
     private String message;
 }

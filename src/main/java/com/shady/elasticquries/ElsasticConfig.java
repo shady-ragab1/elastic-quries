@@ -35,6 +35,8 @@ public class ElsasticConfig extends AbstractElasticsearchConfiguration {
         return factory;
     }
 
+
+
 }
 
 
